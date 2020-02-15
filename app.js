@@ -1,5 +1,10 @@
 //console.log("Hello world2");
 
+function sleep(ms){
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
 class order{
     delivered = false;
     constructor(id, message){
@@ -8,10 +13,25 @@ class order{
     }
     summarize(){    const summary = 'order id: ' + this.id + ', message: ' + this.message + ', delivered: ' + this.delivered;
     return summary;
-
     }
+
     summarize2 = () => {
         const summary = 'order id: ' + this.id + ', message: ' + this.message + ', delivered: ' + this.delivered;
+        return summary;
+    }
+
+    deliver = async () => {
+        console.log('start deliver')
+        await sleep(2000);
+        this.delivered = true;
+        console.log('stop deliver')
+    }
+
+    summarize3 = async () => {
+        console.log('start summarize3')
+        await sleep(2000);
+        const summary = 'order id: ' + this.id + ', message: ' + this.message + ', delivered: ' + this.delivered;
+        console.log('stop summarize3')
         return summary;
     }
 
@@ -58,12 +78,28 @@ const order_summary_3 = summarize_order(order.id, order.message, order.delivered
 console.log(order_summary_3)
 // order_id = 4332;
 
-let order_obj = new order(543, 'second order');
-const order_summary_4 = summarize_order(order_obj.id, order_obj.message, order_obj.delivered);
-console.log(order_summary_4)
 
-const order_summary_5 = order_obj.summarize2();
-console.log(order_summary_5)
+
+let order_obj = new order(543, 'second order');
+
+console.log('vaihe 1');
+
+order_obj.deliver()
+.then(() => {
+    return order_obj.summarize3();
+})
+.then((a) => {console.log(a);})
+
+// const order_summary_4 = summarize_order(order_obj.id, order_obj.message, order_obj.delivered);
+// console.log(order_summary_4);
+// Tapahtumapohjainen 
+const order_summary_wait = order_obj.summarize3().then((summary) => {console.log(summary)});
+// console.log(order_summary_wait);
+
+console.log('Vaihe 2')
+
+
+
 
 
 
